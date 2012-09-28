@@ -30,6 +30,7 @@ from tornado import httpserver
 from tornado import autoreload
 from tornado.web import HTTPError
 from tornado.escape import utf8
+from tornado.util import b
 
 import urllib
 from httplib import responses
@@ -111,6 +112,7 @@ class HTTPApplication(Application):
             (r"/oauth/(?P<version>.+)/protected_resource/(?P<consumer_secret>.+)/(?P<token_secret>.+)", OAuthProtectedResourceHandler),
             (r"/timeouts/connection", ConnectionTimeoutHandler),
             (r"/timeouts/response", ResponseTimeoutHandler),
+            (r"/broken/header", MalformedHeaderHandler),
         ]
 
         settings = dict(
@@ -857,6 +859,20 @@ class Middleware(object):
 
     def __call__(self, request, *args, **kwargs):
         return self.application(request, *args, **kwargs)
+
+
+class MalformedHeaderHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("Malformed header. Content-Type header is missing the :")
+
+    def flush(self, include_footers=False, callback=None):
+        headers = self._generate_headers()
+
+        headers = headers.replace("Content-Type:", "Content-Type")
+
+        chunk = b("").join(self._write_buffer)
+        self.request.write(headers + chunk, callback=callback)
+
 
 
 application = HTTPApplication()
