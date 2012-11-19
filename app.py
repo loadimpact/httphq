@@ -113,6 +113,7 @@ class HTTPApplication(Application):
             (r"/timeouts/connection", ConnectionTimeoutHandler),
             (r"/timeouts/response", ResponseTimeoutHandler),
             (r"/broken/header", MalformedHeaderHandler),
+            (r"/sleep/(?P<sleep_time>[\d\.]+)", SleepHandler),
         ]
 
         settings = dict(
@@ -188,6 +189,7 @@ class HomeHandler(CustomHandler):
             ("(?P<tmp_token_key>.+)", "{tmp_token_key: str}", random_string(10)),
             ("(?P<tmp_token_secret>.+)", "{tmp_token_secret: str}", random_string(10)),
 #            ("(?<consumer_secret>.+)", "{consumer_secret: str}", random_string(15)),
+            ("(?P<sleep_time>[\d\.]+)", "{sleep_time: float}", "0.0"),
             )
 
         for point in self.application.dirty_handlers:
@@ -862,6 +864,8 @@ class Middleware(object):
 
 
 class MalformedHeaderHandler(tornado.web.RequestHandler):
+    """Malformed header
+    """
     def get(self):
         self.write("Malformed header. Content-Type header is missing the :")
 
@@ -873,6 +877,33 @@ class MalformedHeaderHandler(tornado.web.RequestHandler):
         chunk = b("").join(self._write_buffer)
         self.request.write(headers + chunk, callback=callback)
 
+
+class SleepHandler(HEADHandler, GETHandler, POSTHandler, PUTHandler, DELETEHandler, OPTIONSHandler):
+    """Delayed response
+    """
+    def head(self, sleep_time):
+        time.sleep(sleep_time)
+        super(SleepHandler, self).head()
+
+    def get(self, sleep_time):
+        time.sleep(sleep_time)
+        super(SleepHandler, self).get()
+
+    def post(self, sleep_time):
+        time.sleep(sleep_time)
+        super(SleepHandler, self).post()
+
+    def put(self, sleep_time):
+        time.sleep(sleep_time)
+        super(SleepHandler, self).put()
+
+    def delete(self, sleep_time):
+        time.sleep(sleep_time)
+        super(SleepHandler, self).delete()
+
+    def options(self, sleep_time):
+        time.sleep(sleep_time)
+        super(SleepHandler, self).options()
 
 
 application = HTTPApplication()
