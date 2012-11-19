@@ -23,6 +23,10 @@ Simple service for testing HTTP/HTTPS requests. All endpoint responses are JSON-
 - [/status/{status_code: int}](http://h.wrttn.me/status/403) — Returns given HTTP status code
 - [/basic-auth/{username: str}/{password: str}](http://h.wrttn.me/basic-auth/test_username/test_password) — Basic access authentication
 - [/digest-auth/{qop: auth | auth-int}/{username: str}/{password: str}](http://h.wrttn.me/digest-auth/auth/test_username/test_password) — Digest access authentication
+- /timeouts/connection — Endless connection
+- /timeouts/response — Endless response
+- /broken/header — Malformed header
+- /sleep/{sleep_time: float} — Delayed response
 
 </ul>
 ## HTTP status codes

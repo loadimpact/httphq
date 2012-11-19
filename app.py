@@ -882,27 +882,27 @@ class SleepHandler(HEADHandler, GETHandler, POSTHandler, PUTHandler, DELETEHandl
     """Delayed response
     """
     def head(self, sleep_time):
-        time.sleep(sleep_time)
+        time.sleep(float(sleep_time))
         super(SleepHandler, self).head()
 
     def get(self, sleep_time):
-        time.sleep(sleep_time)
+        time.sleep(float(sleep_time))
         super(SleepHandler, self).get()
 
     def post(self, sleep_time):
-        time.sleep(sleep_time)
+        time.sleep(float(sleep_time))
         super(SleepHandler, self).post()
 
     def put(self, sleep_time):
-        time.sleep(sleep_time)
+        time.sleep(float(sleep_time))
         super(SleepHandler, self).put()
 
     def delete(self, sleep_time):
-        time.sleep(sleep_time)
+        time.sleep(float(sleep_time))
         super(SleepHandler, self).delete()
 
     def options(self, sleep_time):
-        time.sleep(sleep_time)
+        time.sleep(float(sleep_time))
         super(SleepHandler, self).options()
 
 
